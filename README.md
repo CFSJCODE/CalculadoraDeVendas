@@ -3,7 +3,7 @@ Calculadora de Precificação Multiplataforma
 Uma ferramenta web front-end para calcular o preço de venda e a margem de contribuição de produtos em múltiplos marketplaces.
 
 
-🚀 Sobre o Projeto
+🚀 Sobre o Projeto:
 
 Esta é uma calculadora de precificação, construída com HTML, CSS e JavaScript puro (Vanilla JS). Ela foi projetada para ajudar vendedores de e-commerce a determinar o preço de venda ideal ou a margem de contribuição de seus produtos.
 
@@ -45,7 +45,7 @@ Alíquota de Impostos (%)
 Interface Limpa: Design moderno, responsivo e em formato de "cards" focado na usabilidade.
 
 
-🛠️ Tecnologias Utilizadas
+🛠️ Tecnologias Utilizadas:
 
 O projeto é construído inteiramente com tecnologias web fundamentais, sem a necessidade de frameworks.
 
@@ -63,7 +63,9 @@ Por ser um projeto puramente front-end, não é necessário nenhum processo de b
 
 Clone o repositório:
 
-git clone [https://github.com/SEU-USUARIO/SEU-REPOSITORIO.git](https://github.com/SEU-USUARIO/SEU-REPOSITORIO.git)
-📄 Licença
+git clone https://github.com/CFSJCODE/CalculadoraDeVendas.git
+
+
+📄 Licença:
 
 Distribuído sob a Licença MIT
