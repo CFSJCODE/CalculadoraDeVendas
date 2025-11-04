@@ -1,0 +1,357 @@
+/* 1. Reset e Variáveis Globais */
+:root {
+    --primary-color: #6a1b9a; /* Roxo principal */
+    --primary-dark: #4a148c;
+    --primary-light: #f3e5f5;
+    --secondary-color: #4caf50; /* Verde para margem positiva */
+    --background-color: #f8f9fa;
+    --card-background: #ffffff;
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --border-color: #e0e0e0;
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+/* 2. Layout Principal */
+.container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 2.25rem;
+    color: var(--primary-dark);
+    margin-bottom: 8px;
+}
+
+header p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+}
+
+/* 3. Estilo dos Cards */
+.card {
+    background-color: var(--card-background);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--card-shadow);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+/* 4. Formulários e Inputs */
+.input-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.input-group input[type="number"] {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: #fdfdfd;
+}
+
+.input-group input[type="number"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+/* 5. Abas (Tabs) e Botão Principal */
+.tabs {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os botões quebrem a linha em telas menores */
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    flex: 1 1 auto; /* Permite que os botões cresçam e encolham, com base automática */
+    min-width: 100px; /* Largura mínima para evitar que fiquem muito pequenos */
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    background-color: #f1f3f5;
+    color: var(--text-secondary);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    border-bottom: 1px solid var(--border-color); /* Adiciona borda inferior */
+}
+
+.tab-button.active {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    border-bottom-color: var(--primary-color); /* Esconde a borda quando ativo */
+}
+
+.tab-button:not(.active):hover {
+    background-color: #e9ecef;
+}
+
+/* Remove a borda direita e adiciona inferior */
+.tab-button:not(:last-child) {
+    border-right: 1px solid var(--border-color);
+}
+
+/* Ajuste para a quebra de linha dos botões */
+@media (max-width: 600px) {
+    .tabs {
+        flex-direction: column; /* Empilha os botões verticalmente */
+    }
+    .tab-button:not(:last-child) {
+        border-right: none; /* Remove borda direita */
+        border-bottom: 1px solid var(--border-color); /* Mantém borda inferior */
+    }
+}
+
+
+.calc-mode-input {
+    width: 100%;
+}
+
+/* Esconde campos específicos da plataforma por padrão */
+[data-platform-inputs] {
+    display: none; /* O JS cuidará de mostrar o ativo */
+    gap: 20px;
+    margin-top: 20px;
+}
+
+#ml-inputs {
+    grid-template-columns: 1fr 1fr;
+}
+
+#amazon-inputs {
+    grid-template-columns: 1fr;
+}
+
+/* Estilo para inputs da Shopee */
+#shopee-inputs {
+    grid-template-columns: 1fr 1fr;
+}
+
+/* Estilo para inputs do Aliexpress (Adicionado) */
+#aliexpress-inputs {
+    grid-template-columns: 1fr;
+}
+
+/* Estilização customizada para o Select (Adicionado) */
+.custom-select-wrapper {
+    position: relative;
+}
+
+.custom-select-wrapper::after {
+    content: '▼';
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.input-group select {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: #fdfdfd;
+    width: 100%;
+    appearance: none; /* Remove a seta padrão */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 40px; /* Espaço para a seta customizada */
+}
+
+.input-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+
+/* Ajuste para responsividade dos inputs */
+@media (max-width: 500px) {
+    #ml-inputs,
+    #shopee-inputs {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+.cta-button {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-top: 20px;
+}
+
+.cta-button:hover {
+    background-color: var(--primary-dark);
+}
+
+/* 6. Resultados */
+#results-container {
+    display: none; /* Começa oculto */
+}
+
+#results-container h2 {
+    font-size: 1.75rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+/* Estilo para quando for Venda Direta (coluna única) */
+.results-grid.single-column {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Esconde cards de resultado por padrão */
+[data-result-card] {
+    display: none;
+}
+
+.result-card h3 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    text-align: center;
+}
+
+.result-card ul {
+    list-style: none;
+    margin: 20px 0;
+}
+
+.result-card li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.result-card li span:first-child {
+    font-weight: 500;
+}
+
+.value {
+    font-weight: 500;
+}
+
+.percent {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    width: 60px; /* Alinha as porcentagens */
+    text-align: right;
+}
+
+.result-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    font-size: 1.1rem;
+}
+
+.result-final {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    margin-top: 12px;
+    border-radius: 8px;
+    font-size: 1.2rem;
+}
+
+.result-final.margin {
+    background-color: var(--primary-light);
+    color: var(--primary-dark);
+}
+
+/* Destaque da margem (verde) */
+.result-card .result-final.margin { 
+    background-color: #e7f5e8; 
+    color: #2e7d32; 
+}
+
+.result-final.price {
+    background-color: var(--primary-dark);
+    color: #ffffff;
+}
+
+/* 7. Responsividade */
+@media (max-width: 768px) {
+    .input-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .results-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    header h1 { font-size: 1.8rem; }
+    header p { font-size: 1rem; }
+}
+

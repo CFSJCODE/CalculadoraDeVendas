@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Precificação Multiplataforma</title>
+    <!-- Fonte do Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Link para o arquivo CSS externo -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ================== Início do Código HTML ================== -->
+    <div class="container">
+        <header>
+            <h1>Calculadora de Precificação</h1>
+            <p>Calcule sua margem de contribuição ou o preço de venda ideal.</p>
+        </header>
+
+        <form id="price-calculator">
+            
+            <!-- SELETOR DE PLATAFORMA -->
+            <div class="card" id="platform-card">
+                <h3>1. Plataforma de Venda</h3>
+                <div class="tabs" id="platform-tabs">
+                    <button type="button" class="tab-button active" data-platform="ml">Mercado Livre</button>
+                    <button type="button" class="tab-button" data-platform="amazon">Amazon</button>
+                    <button type="button" class="tab-button" data-platform="shopee">Shopee</button>
+                    <!-- Botão do Aliexpress Adicionado -->
+                    <button type="button" class="tab-button" data-platform="aliexpress">Aliexpress</button>
+                    <button type="button" class="tab-button" data-platform="vd">Venda Direta</button>
+                </div>
+            </div>
+
+            <!-- SEÇÃO DE CUSTOS -->
+            <div class="card" id="inputs-card">
+                <h3>2. Custos e Taxas</h3>
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label for="custo-produto">Custo do Produto</label>
+                        <input type="number" id="custo-produto" placeholder="R$ 33,00" value="33.00" step="0.01">
+                    </div>
+                    <div class="input-group">
+                        <label for="custo-adicional">Custo Adicional (Embalagem, etc.)</label>
+                        <input type="number" id="custo-adicional" placeholder="R$ 0,00" value="0.00" step="0.01">
+                    </div>
+                    <div class="input-group">
+                        <label for="frete">Custo do Frete</label>
+                        <input type="number" id="frete" placeholder="R$ 11,87" value="11.87" step="0.01">
+                    </div>
+                    <div class="input-group">
+                        <label for="imposto-percent">Alíquota de Impostos (%)</label>
+                        <input type="number" id="imposto-percent" placeholder="4,00" value="4.00" step="0.01">
+                    </div>
+                </div>
+
+                <!-- Inputs específicos do Mercado Livre -->
+                <div id="ml-inputs" data-platform-inputs="ml" style="display: grid;">
+                    <div class="input-group">
+                        <label for="taxa-classico-percent">Taxa Anúncio Clássico (%)</label>
+                        <input type="number" id="taxa-classico-percent" placeholder="12,00" value="12.00" step="0.01">
+                    </div>
+                    <div class="input-group">
+                        <label for="taxa-premium-percent">Taxa Anúncio Premium (%)</label>
+                        <input type="number" id="taxa-premium-percent" placeholder="17,00" value="17.00" step="0.01">
+                    </div>
+                </div>
+
+                <!-- Inputs específicos da Amazon -->
+                <div id="amazon-inputs" data-platform-inputs="amazon" style="display: none;">
+                    <div class="input-group">
+                        <label for="taxa-amazon-percent">Taxa Anúncio Amazon (%)</label>
+                        <input type="number" id="taxa-amazon-percent" placeholder="15,00" value="15.00" step="0.01">
+                    </div>
+                </div>
+
+                <!-- Inputs específicos da Shopee -->
+                <div id="shopee-inputs" data-platform-inputs="shopee" style="display: none;">
+                    <div class="input-group">
+                        <label for="taxa-shopee-base-percent">Comissão Padrão (%)</label>
+                        <input type="number" id="taxa-shopee-base-percent" placeholder="14,00" value="14.00" step="0.01">
+                    </div>
+                    <div class="input-group">
+                        <label for="taxa-shopee-adic-percent">Taxa Adic. Frete Grátis (%)</label>
+                        <input type="number" id="taxa-shopee-adic-percent" placeholder="6,00" value="6.00" step="0.01">
+                    </div>
+                    <div class="input-group">
+                        <label for="limite-comissao-shopee">Limite Comissão (R$)</label>
+                        <input type="number" id="limite-comissao-shopee" placeholder="100,00" value="100.00" step="0.01">
+                    </div>
+                    <div class="input-group">
+                        <label for="taxa-fixa-shopee">Taxa Fixa por Item (R$)</label>
+                        <input type="number" id="taxa-fixa-shopee" placeholder="4,00" value="4.00" step="0.01">
+                    </div>
+                </div>
+
+                <!-- Inputs específicos do Aliexpress (Adicionado) -->
+                <div id="aliexpress-inputs" data-platform-inputs="aliexpress" style="display: none;">
+                    <div class="input-group">
+                        <label for="taxa-aliexpress-select">Categoria da Comissão</label>
+                        <div class="custom-select-wrapper">
+                            <select id="taxa-aliexpress-select">
+                                <option value="5">5% - Eletrodomésticos, celulares, computadores e acessórios, móveis, telefonia e telecomunicações, materiais escolares e de escritório</option>
+                                <option value="8" selected>8% - Vestuário e acessórios, beleza e saúde, ferramentas, componentes eletrônicos, calçados, sapatos, acessórios de moda</option>
+                                <option value="10">10% - Extensões de cabelo e perucas, categorias especiais (como alimentos)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SEÇÃO DE CÁLCULO -->
+            <div class="card" id="calculation-card">
+                <h3>3. Modo de Cálculo</h3>
+                <div class="tabs" id="calc-mode-tabs">
+                    <button type="button" class="tab-button active" data-mode="margin">Calcular Margem</button>
+                    <button type="button" class="tab-button" data-mode="price">Calcular Preço</button>
+                </div>
+
+                <div id="calc-inputs-container">
+                    <!-- Input para Calcular Margem (Modo Padrão) -->
+                    <div class="input-group calc-mode-input" id="mode-margin" style="display: block;">
+                        <label for="preco-venda">Informar Preço de Venda</label>
+                        <input type="number" id="preco-venda" placeholder="R$ 95,98" value="95.98" step="0.01">
+                    </div>
+                    
+                    <!-- Inputs para Calcular Preço (Oculto) -->
+                    <div class="input-group calc-mode-input" id="mode-price" style="display: none;">
+                        <label for="margem-desejada">Informar Margem Desejada (R$)</label>
+                        <input type="number" id="margem-desejada" placeholder="R$ 50,85" step="0.01">
+                    </div>
+                </div>
+
+                <button type="submit" class="cta-button">Calcular Margem</button>
+            </div>
+        </form>
+
+        <!-- SEÇÃO DE RESULTADOS -->
+        <div id="results-container" style="display: none;">
+            <h2>Resultados</h2>
+            <div class="results-grid" id="results-grid">
+                <!-- Card Clássico (ML) -->
+                <div class="card result-card" id="result-classic" data-result-card="ml">
+                    <h3>Anúncio Clássico</h3>
+                    <ul>
+                        <li>
+                            <span>Taxa Anúncio</span>
+                            <span class="value" data-field="taxa-anuncio-valor">R$ 0,00</span>
+                            <span class="percent" data-field="taxa-anuncio-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Frete</span>
+                            <span class="value" data-field="frete-valor">R$ 0,00</span>
+                            <span class="percent" data-field="frete-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Custo do Produto</span>
+                            <span class="value" data-field="custo-produto-valor">R$ 0,00</span>
+                            <span class="percent" data-field="custo-produto-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Custos Adicionais</span>
+                            <span class="value" data-field="custo-adicional-valor">R$ 0,00</span>
+                            <span class="percent" data-field="custo-adicional-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Impostos</span>
+                            <span class="value" data-field="imposto-valor">R$ 0,00</span>
+                            <span class="percent" data-field="imposto-perc">0,00%</span>
+                        </li>
+                    </ul>
+                    <div class="result-total">
+                        <strong>Custo Total</strong>
+                        <strong data-field="custo-total-valor">R$ 0,00</strong>
+                        <strong class="percent" data-field="custo-total-perc">0,00%</strong>
+                    </div>
+                    <div class="result-final margin">
+                        <strong>Margem de Contribuição</strong>
+                        <strong data-field="margem-valor">R$ 0,00</strong>
+                        <strong class="percent" data-field="margem-perc">0,00%</strong>
+                    </div>
+                    <div class="result-final price">
+                        <strong>Preço de Venda</strong>
+                        <strong data-field="preco-venda-final">R$ 0,00</strong>
+                    </div>
+                </div>
+
+                <!-- Card Premium (ML) -->
+                <div class="card result-card" id="result-premium" data-result-card="ml">
+                    <h3>Anúncio Premium</h3>
+                    <ul>
+                        <li>
+                            <span>Taxa Anúncio</span>
+                            <span class="value" data-field="taxa-anuncio-valor">R$ 0,00</span>
+                            <span class="percent" data-field="taxa-anuncio-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Frete</span>
+                            <span class="value" data-field="frete-valor">R$ 0,00</span>
+                            <span class="percent" data-field="frete-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Custo do Produto</span>
+                            <span class="value" data-field="custo-produto-valor">R$ 0,00</span>
+                            <span class="percent" data-field="custo-produto-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Custos Adicionais</span>
+                            <span class="value" data-field="custo-adicional-valor">R$ 0,00</span>
+                            <span class="percent" data-field="custo-adicional-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Impostos</span>
+                            <span class="value" data-field="imposto-valor">R$ 0,00</span>
+                            <span class="percent" data-field="imposto-perc">0,00%</span>
+                        </li>
+                    </ul>
+                    <div class="result-total">
+                        <strong>Custo Total</strong>
+                        <strong data-field="custo-total-valor">R$ 0,00</strong>
+                        <strong class="percent" data-field="custo-total-perc">0,00%</strong>
+                    </div>
+                    <div class="result-final margin">
+                        <strong>Margem de Contribuição</strong>
+                        <strong data-field="margem-valor">R$ 0,00</strong>
+                        <strong class="percent" data-field="margem-perc">0,00%</strong>
+                    </div>
+                    <div class="result-final price">
+                        <strong>Preço de Venda</strong>
+                        <strong data-field="preco-venda-final">R$ 0,00</strong>
+                    </div>
+                </div>
+
+                <!-- Card Amazon -->
+                <div class="card result-card" id="result-amazon" data-result-card="amazon">
+                    <h3>Amazon</h3>
+                    <ul>
+                        <li>
+                            <span>Taxa Anúncio</span>
+                            <span class="value" data-field="taxa-anuncio-valor">R$ 0,00</span>
+                            <span class="percent" data-field="taxa-anuncio-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Frete</span>
+                            <span class="value" data-field="frete-valor">R$ 0,00</span>
+                            <span class="percent" data-field="frete-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Custo do Produto</span>
+                            <span class="value" data-field="custo-produto-valor">R$ 0,00</span>
+                            <span class="percent" data-field="custo-produto-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Custos Adicionais</span>
+                            <span class="value" data-field="custo-adicional-valor">R$ 0,00</span>
+                            <span class="percent" data-field="custo-adicional-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Impostos</span>
+                            <span class="value" data-field="imposto-valor">R$ 0,00</span>
+                            <span class="percent" data-field="imposto-perc">0,00%</span>
+                        </li>
+                    </ul>
+                    <div class="result-total">
+                        <strong>Custo Total</strong>
+                        <strong data-field="custo-total-valor">R$ 0,00</strong>
+                        <strong class="percent" data-field="custo-total-perc">0,00%</strong>
+                    </div>
+                    <div class="result-final margin">
+                        <strong>Margem de Contribuição</strong>
+                        <strong data-field="margem-valor">R$ 0,00</strong>
+                        <strong class="percent" data-field="margem-perc">0,00%</strong>
+                    </div>
+                    <div class="result-final price">
+                        <strong>Preço de Venda</strong>
+                        <strong data-field="preco-venda-final">R$ 0,00</strong>
+                    </div>
+                </div>
+                
+                <!-- Card Shopee (Sem Frete Grátis) -->
+                <div class="card result-card" id="result-shopee-sem-frete" data-result-card="shopee">
+                    <h3>Shopee (Sem Frete Grátis)</h3>
+                    <ul>
+                        <li>
+                            <span>Taxa Anúncio</span>
+                            <span class="value" data-field="taxa-anuncio-valor">R$ 0,00</span>
+                            <span class="percent" data-field="taxa-anuncio-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Frete</span>
+                            <span class="value" data-field="frete-valor">R$ 0,00</span>
+                            <span class="percent" data-field="frete-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Custo do Produto</span>
+                            <span class="value" data-field="custo-produto-valor">R$ 0,00</span>
+                            <span class="percent" data-field="custo-produto-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Custos Adicionais</span>
+                            <span class="value" data-field="custo-adicional-valor">R$ 0,00</span>
+                            <span class="percent" data-field="custo-adicional-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Impostos</span>
+                            <span class="value" data-field="imposto-valor">R$ 0,00</span>
+                            <span class="percent" data-field="imposto-perc">0,00%</span>
+                        </li>
+                    </ul>
+                    <div class="result-total">
+                        <strong>Custo Total</strong>
+                        <strong data-field="custo-total-valor">R$ 0,00</strong>
+                        <strong class="percent" data-field="custo-total-perc">0,00%</strong>
+                    </div>
+                    <div class="result-final margin">
+                        <strong>Margem de Contribuição</strong>
+                        <strong data-field="margem-valor">R$ 0,00</strong>
+                        <strong class="percent" data-field="margem-perc">0,00%</strong>
+                    </div>
+                    <div class="result-final price">
+                        <strong>Preço de Venda</strong>
+                        <strong data-field="preco-venda-final">R$ 0,00</strong>
+                    </div>
+                </div>
+
+                <!-- Card Shopee (Com Frete Grátis) -->
+                <div class="card result-card" id="result-shopee-com-frete" data-result-card="shopee">
+                    <h3>Shopee (Com Frete Grátis)</h3>
+                    <ul>
+                        <li>
+                            <span>Taxa Anúncio</span>
+                            <span class="value" data-field="taxa-anuncio-valor">R$ 0,00</span>
+                            <span class="percent" data-field="taxa-anuncio-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Frete</span>
+                            <span class="value" data-field="frete-valor">R$ 0,00</span>
+                            <span class="percent" data-field="frete-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Custo do Produto</span>
+                            <span class="value" data-field="custo-produto-valor">R$ 0,00</span>
+                            <span class="percent" data-field="custo-produto-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Custos Adicionais</span>
+                            <span class="value" data-field="custo-adicional-valor">R$ 0,00</span>
+                            <span class="percent" data-field="custo-adicional-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Impostos</span>
+                            <span class="value" data-field="imposto-valor">R$ 0,00</span>
+                            <span class="percent" data-field="imposto-perc">0,00%</span>
+                        </li>
+                    </ul>
+                    <div class="result-total">
+                        <strong>Custo Total</strong>
+                        <strong data-field="custo-total-valor">R$ 0,00</strong>
+                        <strong class="percent" data-field="custo-total-perc">0,00%</strong>
+                    </div>
+                    <div class="result-final margin">
+                        <strong>Margem de Contribuição</strong>
+                        <strong data-field="margem-valor">R$ 0,00</strong>
+                        <strong class="percent" data-field="margem-perc">0,00%</strong>
+                    </div>
+                    <div class="result-final price">
+                        <strong>Preço de Venda</strong>
+                        <strong data-field="preco-venda-final">R$ 0,00</strong>
+                    </div>
+                </div>
+
+                <!-- Card Aliexpress (Adicionado) -->
+                <div class="card result-card" id="result-aliexpress" data-result-card="aliexpress">
+                    <h3>Aliexpress</h3>
+                    <ul>
+                        <li>
+                            <span>Taxa Anúncio</span>
+                            <span class="value" data-field="taxa-anuncio-valor">R$ 0,00</span>
+                            <span class="percent" data-field="taxa-anuncio-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Frete</span>
+                            <span class="value" data-field="frete-valor">R$ 0,00</span>
+                            <span class="percent" data-field="frete-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Custo do Produto</span>
+                            <span class="value" data-field="custo-produto-valor">R$ 0,00</span>
+                            <span class="percent" data-field="custo-produto-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Custos Adicionais</span>
+                            <span class="value" data-field="custo-adicional-valor">R$ 0,00</span>
+                            <span class="percent" data-field="custo-adicional-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Impostos</span>
+                            <span class="value" data-field="imposto-valor">R$ 0,00</span>
+                            <span class="percent" data-field="imposto-perc">0,00%</span>
+                        </li>
+                    </ul>
+                    <div class="result-total">
+                        <strong>Custo Total</strong>
+                        <strong data-field="custo-total-valor">R$ 0,00</strong>
+                        <strong class="percent" data-field="custo-total-perc">0,00%</strong>
+                    </div>
+                    <div class="result-final margin">
+                        <strong>Margem de Contribuição</strong>
+                        <strong data-field="margem-valor">R$ 0,00</strong>
+                        <strong class="percent" data-field="margem-perc">0,00%</strong>
+                    </div>
+                    <div class="result-final price">
+                        <strong>Preço de Venda</strong>
+                        <strong data-field="preco-venda-final">R$ 0,00</strong>
+                    </div>
+                </div>
+
+                <!-- Card Venda Direta (VD) -->
+                <div class="card result-card" id="result-direct" data-result-card="vd">
+                    <h3>Venda Direta</h3>
+                    <ul>
+                        <!-- Sem taxa de anúncio aqui -->
+                        <li>
+                            <span>Frete</span>
+                            <span class="value" data-field="frete-valor">R$ 0,00</span>
+                            <span class="percent" data-field="frete-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Custo do Produto</span>
+                            <span class="value" data-field="custo-produto-valor">R$ 0,00</span>
+                            <span class="percent" data-field="custo-produto-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Custos Adicionais</span>
+                            <span class="value" data-field="custo-adicional-valor">R$ 0,00</span>
+                            <span class="percent" data-field="custo-adicional-perc">0,00%</span>
+                        </li>
+                        <li>
+                            <span>Impostos</span>
+                            <span class="value" data-field="imposto-valor">R$ 0,00</span>
+                            <span class="percent" data-field="imposto-perc">0,00%</span>
+                        </li>
+                    </ul>
+                    <div class="result-total">
+                        <strong>Custo Total</strong>
+                        <strong data-field="custo-total-valor">R$ 0,00</strong>
+                        <strong class="percent" data-field="custo-total-perc">0,00%</strong>
+                    </div>
+                    <div class="result-final margin">
+                        <strong>Margem de Contribuição</strong>
+                        <strong data-field="margem-valor">R$ 0,00</strong>
+                        <strong class="percent" data-field="margem-perc">0,00%</strong>
+                    </div>
+                    <div class="result-final price">
+                        <strong>Preço de Venda</strong>
+                        <strong data-field="preco-venda-final">R$ 0,00</strong>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <!-- ================== Fim do Código HTML ================== -->
+
+    <!-- Link para o arquivo JavaScript externo -->
+    <script src="script.js"></script>
+
+</body>
+</html>
+
+
